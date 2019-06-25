@@ -1,0 +1,118 @@
+<div class="container">
+  <div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="col-sm-6">
+          <h2>Manage <b>Posts</b></h2>
+        </div>
+        <div class="col-sm-6">
+          <a class="btn btn-success" (click)="openModal(addPostModal)"><i class="material-icons">&#xE147;</i>
+            <span>Add Post</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Particulars</th>
+          <th>User Id</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let post of posts;let i=index">
+          <td>{{post.id}}</td>
+          <td>{{post.title}}</td>
+          <td>{{post.body}}</td>
+          <td>{{post.userId}}</td>
+          <td>
+            <a href="" class="edit" data-toggle="modal" (click)="openModal(editPostModal,post,i)">
+              <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+            </a>
+            <a href="" class="delete" data-toggle="modal" (click)="openModal(deletePostModal,post,i)">
+              <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Edit Modal HTML -->
+<ng-template #editPostModal>
+  <form #editPost="ngForm" name="editPost" (submit)="saveEditPost()">
+    <div class="modal-header">
+      <h4 class="modal-title">Edit Post</h4>
+      <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" name="postTitle" [(ngModel)]="selectedPost.title" required>
+      </div>
+      <div class="form-group">
+        <label>Body</label>
+        <textarea class="form-control" rows="6" name="postBody" [(ngModel)]="selectedPost.body" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>User Id</label>
+        <input type="text" class="form-control" name="postuserId" [(ngModel)]="selectedPost.userId" disabled required>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+      <input type="submit" class="btn btn-info" value="Save">
+    </div>
+  </form>
+
+</ng-template>
+
+<!-- Delete Modal HTML -->
+<ng-template #deletePostModal>
+  <form>
+    <div class="modal-header">
+      <h4 class="modal-title">Delete Post</h4>
+      <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete these Records?</p>
+      <p class="text-warning"><small>This action cannot be undone.</small></p>
+    </div>
+    <div class="modal-footer">
+      <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+      <input type="button" class="btn btn-danger" value="Delete" (click)="deletePost()">
+    </div>
+  </form>
+</ng-template>
+
+<!-- Add Modal HTML -->
+<ng-template #addPostModal>
+  <form #post="ngForm" name="post" (submit)="addPost(post);">
+    <div class="modal-header">
+      <h4 class="modal-title">Add Post</h4>
+      <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" name="title" [(ngModel)]="PostData.title" required>
+      </div>
+      <div class="form-group">
+        <label>Body</label>
+        <textarea class="form-control" rows="6" [(ngModel)]="PostData.body" name="body" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>User Id</label>
+        <input type="text" class="form-control" disabled [(ngModel)]="PostData.userId" name="userId" required>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="button" class="btn btn-default" (click)="close()" value="Cancel">
+      <input type="submit" class="btn btn-success" [disabled]="post.invalid" value="Add">
+    </div>
+  </form>
+</ng-template>
